@@ -1,0 +1,76 @@
+﻿@model dynamic
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Sample connect restful</title>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+</head>
+<body>
+    <div>
+        <a href="javascript:void(0)" onclick="SampleRequest()">Click here to see result for bellow</a>
+    </div>
+    <div>get by id =1</div>
+    <div id="GetById1"></div>
+    <div>get all</div>
+    <div id="GetAll"></div>
+    <script>
+        var _token = null;
+        function SampleRequest() {
+            $.ajax({
+                url: 'http://sample.api/api/app/GetToken/4488B32B730142409E73E742F16494B3',
+                method: "GET",
+                crossDomain: true
+            }).done(function (msg) {
+                msg = jQuery.parseJSON(msg);
+                _token = msg.Content + '';
+                GetById(_token);
+                GetAll(_token);
+            });
+        }
+
+        function GetById(token) {
+            var sendInfo = {
+                "Action": "GetById"
+                , "Data": "1"
+                , "DataType": "System.Int32"
+                , "Token": token
+            };
+
+            $.ajax({
+                url: "http://sample.api/api/SampleResponse/",
+                crossDomain: true,
+                method: "POST",
+                dataType: "json",
+                data: sendInfo
+            }).done(function (msg) {
+                $('#GetById1').html(JSON.stringify(msg));
+            });
+        }
+
+        function GetAll(token) {
+            var sendInfo = {
+                "Action": "GetAll"
+                , "Data": "1"
+                , "DataType": "System.Int32"
+                , "Token": token
+            };
+
+            $.ajax({
+                url: "http://sample.api/api/SampleResponse/",
+                crossDomain: true,
+                method: "POST",
+                dataType: "json",
+                data: sendInfo
+            }).done(function (msg) {
+                $('#GetAll').html(JSON.stringify(msg));
+            });
+        }
+    </script>
+</body>
+</html>
